@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{1CCD5F69-0A9A-49BA-A06D-55E0FCCC7DBF}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>SimpleRepository.Test</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BasicOperationTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InsertPerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TestBootstrap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReadPerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseRepositoryTestFixture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdatePerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeletePerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpsertPerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomQueryPerformanceTests.cs" />
+  </ItemGroup>
+</Project>

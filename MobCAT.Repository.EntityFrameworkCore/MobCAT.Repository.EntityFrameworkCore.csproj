@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>Microsoft.MobCAT.Repository.EntityFrameworkCore</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>xamcat</Authors>
+    <RepositoryUrl>https://github.com/xamcat/mobcat-library</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
+    <PackageReference Include="MobCAT" Version="1.0.7306" />
+  </ItemGroup>
+    
+</Project>

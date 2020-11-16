@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>NUnit</Company>
+    <Product>NUnit 3 Xamarin Runner</Product>
+    <Copyright>Copyright (C) 2018, Rob Prouse</Copyright>
+    <Version Condition="'$(Version)' == ''">3.10.1</Version>
+
+    <!-- NuGet Package Info -->
+    <PackageId>nunit.xamarin</PackageId>
+    <Title>NUnit 3 Xamarin Runner</Title>
+    <Authors>Rob Prouse</Authors>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/nunit/nunit.xamarin/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageIconUrl>https://cdn.rawgit.com/nunit/resources/master/images/icon/nunit_256.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/nunit/nunit.xamarin</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nunit/nunit.xamarin</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>nunit xamarin android ios monoandroid monotouch tdd unit test testing</PackageTags>
+    <Description>
+Adds support for running NUnit 3 unit tests on Xamarin
+
+Supported Xamarin platforms:
+- Android
+- iOS
+- Windows 10 Universal Apps
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="[3.10.1]" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.396" />
+    <PackageReference Include="MobCAT" Version="1.0.7306" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
+      <DependentUpon>*.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

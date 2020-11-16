@@ -199,9 +199,17 @@ namespace NUnit.Runner.ViewModel
             //string xmlResults = "";
             try
             {
-                var result = await WriteCustomXmlResultFile().ConfigureAwait(false);
+                //var result = await WriteCustomXmlResultFile().ConfigureAwait(false);
                 //xmlResults = _results.GetCustomTestXml().ToString();
-                await BlobStorageService.performBlobOperation(result);
+                var blobReference = _results.GetCustomTestJSON();
+
+                if (blobReference == null)
+                    throw new Exception("Error processing test data XML to JSON");
+
+                //CloudBlockBlob blockBlob = outputBlobContainer.GetBlockBlobReference(blobReference.Filename);
+                //await blockBlob.UploadTextAsync(blobReference.Json);
+
+                await BlobStorageService.performBlobOperation(blobReference);
                 ExportStatus = "Export Success!";
                 Debug.WriteLine("Export Success!");
             }

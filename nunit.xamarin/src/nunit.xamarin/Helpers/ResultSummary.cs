@@ -24,8 +24,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using nunit.xamarin;
+using nunit.xamarin.Helpers;
 using NUnit.Framework.Interfaces;
 using NUnit.Runner.Extensions;
 using Xamarin.Essentials;
@@ -153,6 +158,77 @@ namespace NUnit.Runner.Helpers
             return _xmlResults_Custom;
         }
 
+        /// <summary>
+        /// Summarizes all of the results and returns the test result JSON document with test cloud device values
+        /// </summary>
+        /// <returns></returns>
+        public TestDataBlobReference GetCustomTestJSON()
+        {
+            string jsonData = null;
+            TestDataBlobReference blobReference = null;
+            TestData data = new TestData();
+
+            try
+            {
+                //manufacturer_model
+                string trim_device_manufacturer = String.Concat(DeviceInfo.Manufacturer.ToString().Where(c => !Char.IsWhiteSpace(c)));
+                string trim_device_model = String.Concat(DeviceInfo.Model.ToString().Where(c => !Char.IsWhiteSpace(c)));
+                string xtc_device_name = trim_device_manufacturer + "_" + trim_device_model;
+
+                string sourceString = AppInfo.Name;
+                string removeString = "-Tests";
+                int index = sourceString.IndexOf(removeString);
+                string xtc_app_name = (index < 0) ? sourceString : sourceString.Remove(index, removeString.Length);
+
+                data.Framework = xtc_app_name;
+                data.FrameworkVersion = Constants.DBFrameworkVersionNumber;
+                data.Device = xtc_device_name;
+                data.DevicePlatform = DeviceInfo.Platform.ToString();
+                data.DeviceOS = DeviceInfo.VersionString.ToString();
+                if (String.IsNullOrEmpty(Constants.AzureDevOpsBuildNumber))
+                    data.BuildNumber = "LOCALRUN";
+                else
+                    data.BuildNumber = Constants.AzureDevOpsBuildNumber;
+
+                data.Results = _xmlResults.Root
+                    .Elements("test-suite")?
+                    .Elements("test-suite")?
+                    .Elements("test-suite")?
+                    .Where(i => i.Attribute(XName.Get("runstate")).Value == "Runnable")
+                    .Elements("test-suite")?
+                    .Where(i => i.Attribute(XName.Get("type")).Value == "TestFixture")
+                    .Elements("test-suite")?
+                    .Elements("test-case")?
+                    .Where(i => i.Elements("reason").Count() > 0)
+                    .ToDictionary(
+                        i => i.Attribute(XName.Get("name")).Value,
+                        i => GetMessageValue(
+                            i.Elements("reason")
+                            .FirstOrDefault()
+                            .Elements("message")
+                            .FirstOrDefault().Value));
+
+                jsonData = JsonConvert.SerializeObject(data, Formatting.Indented);
+
+                blobReference = new TestDataBlobReference
+                {
+                    Filename = $"[{data.BuildNumber}] {data.DevicePlatform}-{data.Framework}-{data.Device}.json",
+                    Json = jsonData
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return blobReference;
+        }
+
+        static Regex _testCaseMessageRegex = new Regex(@".*:\s([\d+]*)");
+
+        static int GetMessageValue(string message)
+            => int.Parse(_testCaseMessageRegex.Match(message).Groups[1].Value);
+
         #endregion
 
         #region Properties
@@ -250,7 +326,7 @@ namespace NUnit.Runner.Helpers
         /// <summary>
         /// Gets how long it took to execute the tests
         /// </summary>
-        public TimeSpan Duration 
+        public TimeSpan Duration
         {
             get { return EndTime.Subtract(StartTime); }
         }
@@ -294,31 +370,31 @@ namespace NUnit.Runner.Helpers
                 AssertCount += result.AssertCount;
                 switch (result.ResultState.Status)
                 {
-                case TestStatus.Passed:
-                    PassCount++;
-                    if (status == TestStatus.Inconclusive)
-                        status = TestStatus.Passed;
-                    break;
-                case TestStatus.Failed:
-                    status = TestStatus.Failed;
-                    if (result.ResultState == ResultState.Failure)
-                        FailureCount++;
-                    else if (result.ResultState == ResultState.NotRunnable)
-                        InvalidCount++;
-                    else
-                        ErrorCount++;
-                    break;
-                case TestStatus.Skipped:
-                    if (result.ResultState == ResultState.Ignored)
-                        IgnoreCount++;
-                    else if (result.ResultState == ResultState.Explicit)
-                        ExplicitCount++;
-                    else
-                        SkipCount++;
-                    break;
-                case TestStatus.Inconclusive:
-                    InconclusiveCount++;
-                    break;
+                    case TestStatus.Passed:
+                        PassCount++;
+                        if (status == TestStatus.Inconclusive)
+                            status = TestStatus.Passed;
+                        break;
+                    case TestStatus.Failed:
+                        status = TestStatus.Failed;
+                        if (result.ResultState == ResultState.Failure)
+                            FailureCount++;
+                        else if (result.ResultState == ResultState.NotRunnable)
+                            InvalidCount++;
+                        else
+                            ErrorCount++;
+                        break;
+                    case TestStatus.Skipped:
+                        if (result.ResultState == ResultState.Ignored)
+                            IgnoreCount++;
+                        else if (result.ResultState == ResultState.Explicit)
+                            ExplicitCount++;
+                        else
+                            SkipCount++;
+                        break;
+                    case TestStatus.Inconclusive:
+                        InconclusiveCount++;
+                        break;
                 }
 
                 switch (OverallResult)

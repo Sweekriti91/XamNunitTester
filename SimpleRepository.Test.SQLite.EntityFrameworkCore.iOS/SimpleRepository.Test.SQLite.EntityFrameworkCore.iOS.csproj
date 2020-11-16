@@ -149,6 +149,10 @@
       <Project>{970F5BAF-6E9E-4C7A-AEAA-62423C4607BE}</Project>
       <Name>MobCAT.Repository.EntityFrameworkCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\nunit.xamarin\src\nunit.xamarin\nunit.xamarin.csproj">
+      <Project>{6C961301-0E40-49FC-B31C-F294D5249D97}</Project>
+      <Name>nunit.xamarin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <LinkDescription Include="LinkDescription.xml" />

@@ -43,14 +43,16 @@ namespace NUnit.Runner.Helpers
     /// </summary>
     internal class ResultSummary
     {
-        private readonly TestRunResult _results;
+        //private readonly TestRunResult _results;
+        public TestRunResult TestResult { get; }
         private XDocument _xmlResults;
         private XDocument _xmlResults_Custom;
         #region Constructor
 
         public ResultSummary(TestRunResult results)
         {
-            _results = results;
+            //_results = results;
+            TestResult = results;
             Initialize();
             Summarize(results.TestResults);
             StartTime = results.StartTime;
@@ -66,7 +68,8 @@ namespace NUnit.Runner.Helpers
         /// <returns></returns>
         public IReadOnlyCollection<ITestResult> GetTestResults()
         {
-            return _results.TestResults;
+            //return _results.TestResults;
+            return TestResult.TestResults;
         }
 
         /// <summary>
@@ -75,6 +78,36 @@ namespace NUnit.Runner.Helpers
         /// <returns></returns>
         public XDocument GetTestXml()
         {
+            //if (_xmlResults != null)
+            //    return _xmlResults;
+
+            //var test = new XElement("test-run");
+            //test.Add(new XAttribute("id", "0"));
+            //test.Add(new XAttribute("testcasecount", TestCount));
+            //test.Add(new XAttribute("total", TestCount));
+            //test.Add(new XAttribute("passed", PassCount));
+            //test.Add(new XAttribute("failed", FailureCount));
+            //test.Add(new XAttribute("inconclusive", InconclusiveCount));
+            //test.Add(new XAttribute("skipped", SkipCount));
+            //test.Add(new XAttribute("asserts", AssertCount));
+            //test.Add(new XAttribute("result", OverallResult));
+
+            //test.Add(new XAttribute("xamarin-runner-version", typeof(ResultSummary).GetTypeInfo().Assembly.GetName().Version.ToString()));
+
+            //var startTime = _results.StartTime;
+            //var endTime = _results.EndTime;
+            //var duration = endTime.Subtract(startTime).TotalSeconds;
+
+            //test.Add(new XAttribute("start-time", startTime.ToString("u")));
+            //test.Add(new XAttribute("end-time", endTime.ToString("u")));
+            //test.Add(new XAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo)));
+
+            //foreach (var result in _results.TestResults)
+            //    test.Add(XElement.Parse(result.ToXml(true).OuterXml));
+
+            //_xmlResults = new XDocument(test);
+            //return _xmlResults;
+
             if (_xmlResults != null)
                 return _xmlResults;
 
@@ -91,15 +124,11 @@ namespace NUnit.Runner.Helpers
 
             test.Add(new XAttribute("xamarin-runner-version", typeof(ResultSummary).GetTypeInfo().Assembly.GetName().Version.ToString()));
 
-            var startTime = _results.StartTime;
-            var endTime = _results.EndTime;
-            var duration = endTime.Subtract(startTime).TotalSeconds;
+            test.Add(new XAttribute("start-time", TestResult.StartTime.ToString("u")));
+            test.Add(new XAttribute("end-time", TestResult.EndTime.ToString("u")));
+            test.Add(new XAttribute("duration", TestResult.Duration.ToString("0.000000", NumberFormatInfo.InvariantInfo)));
 
-            test.Add(new XAttribute("start-time", startTime.ToString("u")));
-            test.Add(new XAttribute("end-time", endTime.ToString("u")));
-            test.Add(new XAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo)));
-
-            foreach (var result in _results.TestResults)
+            foreach (var result in TestResult.TestResults)
                 test.Add(XElement.Parse(result.ToXml(true).OuterXml));
 
             _xmlResults = new XDocument(test);
@@ -110,53 +139,53 @@ namespace NUnit.Runner.Helpers
         /// Summarizes all of the results and returns the test result xml document with test cloud device values
         /// </summary>
         /// <returns></returns>
-        public XDocument GetCustomTestXml()
-        {
-            if (_xmlResults_Custom != null)
-                _xmlResults_Custom = null;
+        //public XDocument GetCustomTestXml()
+        //{
+        //    if (_xmlResults_Custom != null)
+        //        _xmlResults_Custom = null;
 
-            var test = new XElement("test-run");
-            test.Add(new XAttribute("id", "0"));
-            test.Add(new XAttribute("testcasecount", TestCount));
-            test.Add(new XAttribute("total", TestCount));
-            test.Add(new XAttribute("passed", PassCount));
-            test.Add(new XAttribute("failed", FailureCount));
-            test.Add(new XAttribute("inconclusive", InconclusiveCount));
-            test.Add(new XAttribute("skipped", SkipCount));
-            test.Add(new XAttribute("asserts", AssertCount));
-            test.Add(new XAttribute("result", OverallResult));
+        //    var test = new XElement("test-run");
+        //    test.Add(new XAttribute("id", "0"));
+        //    test.Add(new XAttribute("testcasecount", TestCount));
+        //    test.Add(new XAttribute("total", TestCount));
+        //    test.Add(new XAttribute("passed", PassCount));
+        //    test.Add(new XAttribute("failed", FailureCount));
+        //    test.Add(new XAttribute("inconclusive", InconclusiveCount));
+        //    test.Add(new XAttribute("skipped", SkipCount));
+        //    test.Add(new XAttribute("asserts", AssertCount));
+        //    test.Add(new XAttribute("result", OverallResult));
 
-            test.Add(new XAttribute("xamarin-runner-version", typeof(ResultSummary).GetTypeInfo().Assembly.GetName().Version.ToString()));
+        //    test.Add(new XAttribute("xamarin-runner-version", typeof(ResultSummary).GetTypeInfo().Assembly.GetName().Version.ToString()));
 
-            var startTime = _results.StartTime;
-            var endTime = _results.EndTime;
-            var duration = endTime.Subtract(startTime).TotalSeconds;
+        //    var startTime = _results.StartTime;
+        //    var endTime = _results.EndTime;
+        //    var duration = endTime.Subtract(startTime).TotalSeconds;
 
-            test.Add(new XAttribute("start-time", startTime.ToString("u")));
-            test.Add(new XAttribute("end-time", endTime.ToString("u")));
-            test.Add(new XAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo)));
+        //    test.Add(new XAttribute("start-time", startTime.ToString("u")));
+        //    test.Add(new XAttribute("end-time", endTime.ToString("u")));
+        //    test.Add(new XAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo)));
 
-            string xtc_device_platform = DeviceInfo.Platform.ToString();
-            //manufacturer_model
-            string xtc_device_name = DeviceInfo.Manufacturer.ToString() + "_" + DeviceInfo.Model.ToString();
-            string xtc_device_os = DeviceInfo.VersionString.ToString();
+        //    string xtc_device_platform = DeviceInfo.Platform.ToString();
+        //    //manufacturer_model
+        //    string xtc_device_name = DeviceInfo.Manufacturer.ToString() + "_" + DeviceInfo.Model.ToString();
+        //    string xtc_device_os = DeviceInfo.VersionString.ToString();
 
-            string sourceString = AppInfo.Name;
-            string removeString = "-Tests";
-            int index = sourceString.IndexOf(removeString);
-            string xtc_app_name = (index < 0) ? sourceString : sourceString.Remove(index, removeString.Length);
+        //    string sourceString = AppInfo.Name;
+        //    string removeString = "-Tests";
+        //    int index = sourceString.IndexOf(removeString);
+        //    string xtc_app_name = (index < 0) ? sourceString : sourceString.Remove(index, removeString.Length);
 
-            test.Add(new XAttribute("xtc_framework", xtc_app_name));
-            test.Add(new XAttribute("xtc_device_platform", xtc_device_platform));
-            test.Add(new XAttribute("xtc_device_name", xtc_device_name));
-            test.Add(new XAttribute("xtc_device_os", xtc_device_os));
+        //    test.Add(new XAttribute("xtc_framework", xtc_app_name));
+        //    test.Add(new XAttribute("xtc_device_platform", xtc_device_platform));
+        //    test.Add(new XAttribute("xtc_device_name", xtc_device_name));
+        //    test.Add(new XAttribute("xtc_device_os", xtc_device_os));
 
-            foreach (var result in _results.TestResults)
-                test.Add(XElement.Parse(result.ToXml(true).OuterXml));
+        //    foreach (var result in _results.TestResults)
+        //        test.Add(XElement.Parse(result.ToXml(true).OuterXml));
 
-            _xmlResults_Custom = new XDocument(test);
-            return _xmlResults_Custom;
-        }
+        //    _xmlResults_Custom = new XDocument(test);
+        //    return _xmlResults_Custom;
+        //}
 
         /// <summary>
         /// Summarizes all of the results and returns the test result JSON document with test cloud device values
@@ -354,6 +383,65 @@ namespace NUnit.Runner.Helpers
             foreach (var result in results)
                 Summarize(result);
         }
+
+        //private void Summarize(ITestResult result)
+        //{
+        //    var status = TestStatus.Inconclusive;
+
+        //    if (result.Test.IsSuite)
+        //    {
+        //        foreach (ITestResult r in result.Children)
+        //            Summarize(r);
+        //    }
+        //    else
+        //    {
+        //        TestCount++;
+        //        AssertCount += result.AssertCount;
+        //        switch (result.ResultState.Status)
+        //        {
+        //            case TestStatus.Passed:
+        //                PassCount++;
+        //                if (status == TestStatus.Inconclusive)
+        //                    status = TestStatus.Passed;
+        //                break;
+        //            case TestStatus.Failed:
+        //                status = TestStatus.Failed;
+        //                if (result.ResultState == ResultState.Failure)
+        //                    FailureCount++;
+        //                else if (result.ResultState == ResultState.NotRunnable)
+        //                    InvalidCount++;
+        //                else
+        //                    ErrorCount++;
+        //                break;
+        //            case TestStatus.Skipped:
+        //                if (result.ResultState == ResultState.Ignored)
+        //                    IgnoreCount++;
+        //                else if (result.ResultState == ResultState.Explicit)
+        //                    ExplicitCount++;
+        //                else
+        //                    SkipCount++;
+        //                break;
+        //            case TestStatus.Inconclusive:
+        //                InconclusiveCount++;
+        //                break;
+        //        }
+
+        //        switch (OverallResult)
+        //        {
+        //            case TestStatus.Inconclusive:
+        //                OverallResult = status;
+        //                break;
+        //            case TestStatus.Passed:
+        //                if (status == TestStatus.Failed)
+        //                    OverallResult = status;
+        //                break;
+        //            case TestStatus.Skipped:
+        //            case TestStatus.Failed:
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //}
 
         private void Summarize(ITestResult result)
         {

@@ -40,54 +40,297 @@ using System.Linq;
 
 namespace NUnit.Runner.ViewModel
 {
+    //    class SummaryViewModel : BaseViewModel
+    //    {
+    //        readonly TestPackage _testPackage;
+    //        ResultSummary _results;
+    //        bool _running;
+    //        TestResultProcessor _resultProcessor;
+
+    //        public SummaryViewModel()
+    //        {
+    //            ExportStatus = "Not Exported";
+    //            _testPackage = new TestPackage();
+    //            RunTestsCommand = new Command(async o => await ExecuteTestsAync(), o => !Running);
+    //            ViewAllResultsCommand = new Command(
+    //                async o => await Navigation.PushAsync(new ResultsView(new ResultsViewModel(_results.GetTestResults(), true))),
+    //                o => !HasResults);
+    //            ViewFailedResultsCommand = new Command(
+    //                async o => await Navigation.PushAsync(new ResultsView(new ResultsViewModel(_results.GetTestResults(), false))),
+    //                o => !HasResults);
+
+    //            ExportTestResultsXML = new Command(OnExportResultXml);
+    //        }
+
+    //        private TestOptions options;
+
+    //        /// <summary>
+    //        /// User options for the test suite.
+    //        /// </summary>
+    //        public TestOptions Options {
+    //            get
+    //            {
+    //                if(options == null)
+    //                {
+    //                    options = new TestOptions();
+    //                }
+    //                return options;
+    //            }
+    //            set
+    //            {
+    //                options = value;
+    //            }
+    //        }
+
+    //        /// <summary>
+    //        /// Called from the view when the view is appearing
+    //        /// </summary>
+    //        public void OnAppearing()
+    //        {
+    //            if(Options.AutoRun)
+    //            {
+    //                // Don't rerun if we navigate back
+    //                Options.AutoRun = false;
+    //                RunTestsCommand.Execute(null);
+    //            }
+    //        }
+
+    //        /// <summary>
+    //        /// The overall test results
+    //        /// </summary>
+    //        public ResultSummary Results
+    //        {
+    //            get { return _results; }
+    //            set
+    //            {
+    //                if (Equals(value, _results)) return;
+    //                _results = value;
+    //                OnPropertyChanged();
+    //                OnPropertyChanged("HasResults");
+    //            }
+    //        }
+
+    //        /// <summary>
+    //        /// True if tests are currently running
+    //        /// </summary>
+    //        public bool Running
+    //        {
+    //            get { return _running; }
+    //            set
+    //            {
+    //                if (value.Equals(_running)) return;
+    //                _running = value;
+    //                OnPropertyChanged();
+    //            }
+    //        }
+
+    //        /// <summary>
+    //        /// True if we have test results to display
+    //        /// </summary>
+    //        public bool HasResults => Results != null;
+
+    //        public ICommand RunTestsCommand { set; get; }
+    //        public ICommand ViewAllResultsCommand { set; get; }
+    //        public ICommand ViewFailedResultsCommand { set; get; }
+    //        public ICommand ExportTestResultsXML { set; get; }
+
+    //        /// <summary>
+    //        /// Adds an assembly to be tested.
+    //        /// </summary>
+    //        /// <param name="testAssembly">The test assembly.</param>
+    //        /// <returns></returns>
+    //        internal void AddTest(Assembly testAssembly, Dictionary<string, object> options = null)
+    //        {
+    //            _testPackage.AddAssembly(testAssembly, options);
+    //        }
+
+    //        async Task ExecuteTestsAync()
+    //        {
+    //            Running = true;
+    //            Results = null;
+    //            TestRunResult results = await _testPackage.ExecuteTests();
+    //            ResultSummary summary = new ResultSummary(results);
+
+    //            _resultProcessor = TestResultProcessor.BuildChainOfResponsability(Options);
+    //            await _resultProcessor.Process(summary).ConfigureAwait(false);
+
+    //            var temp = summary;
+    //            Debug.WriteLine(summary);
+
+    //            Device.BeginInvokeOnMainThread(
+    //                () =>
+    //                    {
+    //                        Results = summary;
+    //                        Running = false;
+
+    //                    if (Options.TerminateAfterExecution)
+    //                        TerminateWithSuccess();
+    //                });
+    //        }
+
+    //        public static void TerminateWithSuccess()
+    //        {
+    //#if __IOS__
+    //            var selector = new ObjCRuntime.Selector("terminateWithSuccess");
+    //            UIKit.UIApplication.SharedApplication.PerformSelector(selector, UIKit.UIApplication.SharedApplication, 0);
+    //#elif __DROID__
+    //            System.Environment.Exit(0);
+    //#elif WINDOWS_UWP
+    //            Windows.UI.Xaml.Application.Current.Exit();
+    //#endif
+    //        }
+
+    //        private string _exportStatus;
+    //        public string ExportStatus
+    //        {
+    //            get => _exportStatus;
+    //            set
+    //            {
+    //                _exportStatus = value;
+    //                OnPropertyChanged();
+    //            }
+    //        }
+
+    //        public async void OnExportResultXml()
+    //        {
+    //            //uncomment to see XML value
+    //            //var temp = _results.GetCustomTestXml();
+    //            //write to xml file appending device name to file name
+    //            //string xmlResults = "";
+    //            try
+    //            {
+    //                //var result = await WriteCustomXmlResultFile().ConfigureAwait(false);
+    //                //xmlResults = _results.GetCustomTestXml().ToString();
+    //                var blobReference = _results.GetCustomTestJSON();
+
+    //                if (blobReference == null)
+    //                    throw new Exception("Error processing test data XML to JSON");
+
+    //                //CloudBlockBlob blockBlob = outputBlobContainer.GetBlockBlobReference(blobReference.Filename);
+    //                //await blockBlob.UploadTextAsync(blobReference.Json);
+
+    //                await BlobStorageService.performBlobOperation(blobReference);
+    //                ExportStatus = "Export Success!";
+    //                Debug.WriteLine("Export Success!");
+    //            }
+    //            catch (Exception)
+    //            {
+    //                ExportStatus = "Fatal error while trying to write xml result file!";
+    //                Debug.WriteLine("Fatal error while trying to write xml result file!");
+    //                throw;
+    //            }
+
+    //            //Upload file to Blob
+
+    //            /***
+    //             * UNCOMMENT FOR SANITY CHECK OF FILE EXPORTED
+    //             *
+    //             * 
+    //            var xmlFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library");
+    //            //file name that gets uploaded to Blob storage
+    //            string xtc_device_platform = DeviceInfo.Platform.ToString();
+    //            //manufacturer_model
+    //            string xtc_device_name = DeviceInfo.Manufacturer.ToString() + "_" + DeviceInfo.Model.ToString();
+    //            //utc datetimenow
+    //            string dateTimeNow = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
+    //            string fileName = dateTimeNow + "_" + xtc_device_name + "_" + xtc_device_name + ".xml";
+    //            string custom_xmlfile = Path.Combine(xmlFilePath, fileName);
+
+    //            string text = File.ReadAllText(custom_xmlfile);
+    //            Debug.WriteLine("**** FROM XML FILE IN LIBRARY*****");
+    //            Debug.WriteLine(text);
+    //            Debug.WriteLine("******");
+
+    //             *
+    //             *
+    //             *
+    //             * ***/
+
+    //        }
+
+    //        async Task<string> WriteCustomXmlResultFile()
+    //        {
+    //            var xmlFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library");
+    //            //file name that gets uploaded to Blob storage
+    //            string xtc_device_platform = DeviceInfo.Platform.ToString();
+    //            //manufacturer_model
+    //            string device_manufacturer = DeviceInfo.Manufacturer.ToString();
+    //            string trim_device_manufacturer = String.Concat(device_manufacturer.Where(c => !Char.IsWhiteSpace(c)));
+    //            string device_model = DeviceInfo.Model.ToString();
+    //            string trim_device_model = String.Concat(device_model.Where(c => !Char.IsWhiteSpace(c)));
+    //            string xtc_device_name = trim_device_manufacturer + "_" + trim_device_model;
+    //            //utc datetimenow
+    //            string dateTimeNow = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm");
+    //            //string dateTimeNow = DateTime.UtcNow.ToString("yyyy-MM-dd");
+    //            string sourceString = AppInfo.Name;
+    //            string removeString = "-Tests";
+    //            int index = sourceString.IndexOf(removeString);
+    //            string xtc_app_name = (index < 0) ? sourceString : sourceString.Remove(index, removeString.Length);
+    //            string fileName = xtc_device_platform + "-" + xtc_app_name + "_" + dateTimeNow + "_" + xtc_device_name + ".xml";
+    //            //string fileName = xtc_device_platform + "-" + xtc_app_name + "_" + xtc_device_name + ".xml";
+    //            string custom_xmlfile = Path.Combine(xmlFilePath, fileName);
+
+    //            string outputFolderName = Path.GetDirectoryName(custom_xmlfile);
+
+    //            Directory.CreateDirectory(outputFolderName);
+
+    //            using (var resultFileStream = new StreamWriter(custom_xmlfile, false))
+    //            {
+    //                var xml = _results.GetCustomTestXml().ToString();
+    //                await resultFileStream.WriteAsync(xml);
+    //            }
+
+    //            return custom_xmlfile;
+    //        }
+    //    }
+
     class SummaryViewModel : BaseViewModel
     {
         readonly TestPackage _testPackage;
-        ResultSummary _results;
+        ResultSummary _summary;
         bool _running;
-        TestResultProcessor _resultProcessor;
 
         public SummaryViewModel()
         {
             ExportStatus = "Not Exported";
             _testPackage = new TestPackage();
-            RunTestsCommand = new Command(async o => await ExecuteTestsAync(), o => !Running);
-            ViewAllResultsCommand = new Command(
-                async o => await Navigation.PushAsync(new ResultsView(new ResultsViewModel(_results.GetTestResults(), true))),
-                o => !HasResults);
+            RunTestsCommand = new Command(_ => ExecuteTestsAsync(), _ => !Running);
             ViewFailedResultsCommand = new Command(
-                async o => await Navigation.PushAsync(new ResultsView(new ResultsViewModel(_results.GetTestResults(), false))),
-                o => !HasResults);
+                _ => Navigation.PushAsync(new ResultsView(new ResultsViewModel(_summary.GetTestResults(), false))),
+                _ => !HasResults);
 
+            ExploreTestsCommand = new Command(_ => ExploreTestsAsync(), _ => !Running);
             ExportTestResultsXML = new Command(OnExportResultXml);
         }
-
-        private TestOptions options;
 
         /// <summary>
         /// User options for the test suite.
         /// </summary>
-        public TestOptions Options {
+        public TestOptions Options
+        {
             get
             {
-                if(options == null)
+                if (_testPackage.Options == null)
                 {
-                    options = new TestOptions();
+                    _testPackage.Options = new TestOptions();
                 }
-                return options;
+
+                return _testPackage.Options;
             }
             set
             {
-                options = value;
+                _testPackage.Options = value;
             }
         }
+
+        public string ExploreText => $"Explore {_testPackage.TestsCount} tests >";
 
         /// <summary>
         /// Called from the view when the view is appearing
         /// </summary>
         public void OnAppearing()
         {
-            if(Options.AutoRun)
+            if (Options.AutoRun)
             {
                 // Don't rerun if we navigate back
                 Options.AutoRun = false;
@@ -100,13 +343,16 @@ namespace NUnit.Runner.ViewModel
         /// </summary>
         public ResultSummary Results
         {
-            get { return _results; }
+            get
+            {
+                return _summary;
+            }
             set
             {
-                if (Equals(value, _results)) return;
-                _results = value;
-                OnPropertyChanged();
-                OnPropertyChanged("HasResults");
+                if (Set(ref _summary, value))
+                {
+                    OnPropertyChanged(nameof(HasResults));
+                }
             }
         }
 
@@ -118,9 +364,7 @@ namespace NUnit.Runner.ViewModel
             get { return _running; }
             set
             {
-                if (value.Equals(_running)) return;
-                _running = value;
-                OnPropertyChanged();
+                Set(ref _running, value);
             }
         }
 
@@ -130,8 +374,8 @@ namespace NUnit.Runner.ViewModel
         public bool HasResults => Results != null;
 
         public ICommand RunTestsCommand { set; get; }
-        public ICommand ViewAllResultsCommand { set; get; }
         public ICommand ViewFailedResultsCommand { set; get; }
+        public ICommand ExploreTestsCommand { set; get; }
         public ICommand ExportTestResultsXML { set; get; }
 
         /// <summary>
@@ -139,36 +383,57 @@ namespace NUnit.Runner.ViewModel
         /// </summary>
         /// <param name="testAssembly">The test assembly.</param>
         /// <returns></returns>
-        internal void AddTest(Assembly testAssembly, Dictionary<string, object> options = null)
+        internal void AddTest(Assembly testAssembly,Dictionary<string, object> options = null)
         {
             _testPackage.AddAssembly(testAssembly, options);
+            OnPropertyChanged(nameof(ExploreText));
         }
 
-        async Task ExecuteTestsAync()
+        private async Task ExploreTestsAsync()
+        {
+            IEnumerable<TestViewModel> tests;
+            if (_summary == null)
+            {
+                tests = _testPackage.LoadedTests.Select(t => new TestViewModel(t));
+            }
+            else
+            {
+                var results = _summary.GetTestResults().AsEnumerable();
+
+                while (results.Count() == 1)
+                {
+                    results = results.Single().Children;
+                }
+
+                tests = results.Select(r => new TestViewModel(r));
+            }
+
+            await Navigation.PushAsync(new ExploreView(new ExploreViewModel(tests, "Tests", _testPackage)));
+        }
+
+        private async Task ExecuteTestsAsync()
         {
             Running = true;
             Results = null;
-            TestRunResult results = await _testPackage.ExecuteTests();
-            ResultSummary summary = new ResultSummary(results);
+            var results = await _testPackage.ExecuteTests();
+            var summary = await _testPackage.ProcessResults(results);
 
-            _resultProcessor = TestResultProcessor.BuildChainOfResponsability(Options);
-            await _resultProcessor.Process(summary).ConfigureAwait(false);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Options.OnCompletedCallback?.Invoke();
 
-            var temp = summary;
-            Debug.WriteLine(summary);
+                if (Options.TerminateAfterExecution)
+                {
+                    TerminateWithSuccess();
+                    return;
+                }
 
-            Device.BeginInvokeOnMainThread(
-                () =>
-                    {
-                        Results = summary;
-                        Running = false;
-
-                    if (Options.TerminateAfterExecution)
-                        TerminateWithSuccess();
-                });
+                Results = summary;
+                Running = false;
+            });
         }
 
-        public static void TerminateWithSuccess()
+        private static void TerminateWithSuccess()
         {
 #if __IOS__
             var selector = new ObjCRuntime.Selector("terminateWithSuccess");
@@ -201,7 +466,7 @@ namespace NUnit.Runner.ViewModel
             {
                 //var result = await WriteCustomXmlResultFile().ConfigureAwait(false);
                 //xmlResults = _results.GetCustomTestXml().ToString();
-                var blobReference = _results.GetCustomTestJSON();
+                var blobReference = _summary.GetCustomTestJSON();
 
                 if (blobReference == null)
                     throw new Exception("Error processing test data XML to JSON");
@@ -276,8 +541,8 @@ namespace NUnit.Runner.ViewModel
 
             using (var resultFileStream = new StreamWriter(custom_xmlfile, false))
             {
-                var xml = _results.GetCustomTestXml().ToString();
-                await resultFileStream.WriteAsync(xml);
+                //var xml = _results.GetCustomTestXml().ToString();
+                //await resultFileStream.WriteAsync(xml);
             }
 
             return custom_xmlfile;

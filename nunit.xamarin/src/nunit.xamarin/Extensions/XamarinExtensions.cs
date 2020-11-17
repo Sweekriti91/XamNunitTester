@@ -23,6 +23,8 @@
 
 using NUnit.Framework.Interfaces;
 using Xamarin.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NUnit.Runner.Extensions
 {
@@ -53,6 +55,18 @@ namespace NUnit.Runner.Extensions
                 default:
                     return Xamarin.Forms.Color.Gray;
             }
+        }
+
+        public static ResultState OverallResultState(this ITestResult result)
+        {
+            if (result.ResultState.Status == TestStatus.Skipped &&
+                result.Test.IsSuite &&
+                result.Children.Flatten().Any(c => c.ResultState.Status == TestStatus.Passed))
+            {
+                return new ResultState(TestStatus.Passed);
+            }
+
+            return result.ResultState;
         }
     }
 }

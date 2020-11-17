@@ -9,15 +9,9 @@
     <Import_RootNamespace>SimpleRepository.Test</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)BasicOperationTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)InsertPerformanceTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestBootstrap.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ReadPerformanceTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BaseRepositoryTestFixture.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UpdatePerformanceTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DeletePerformanceTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UpsertPerformanceTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CustomQueryPerformanceTests.cs" />
   </ItemGroup>
 </Project>

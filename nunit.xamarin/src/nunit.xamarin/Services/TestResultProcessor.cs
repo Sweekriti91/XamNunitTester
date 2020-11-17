@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System.Threading.Tasks;
+using nunit.xamarin.Services;
 using NUnit.Runner.Helpers;
 
 namespace NUnit.Runner.Services
@@ -41,11 +42,19 @@ namespace NUnit.Runner.Services
 
         public static TestResultProcessor BuildChainOfResponsability(TestOptions options)
         {
-            var tcpWriter = new TcpWriterProcessor(options);
-            var xmlFileWriter = new XmlFileProcessor(options);
+            //var tcpWriter = new TcpWriterProcessor(options);
+            //var xmlFileWriter = new XmlFileProcessor(options);
 
-            tcpWriter.Successor = xmlFileWriter;
-            return tcpWriter;
+            //tcpWriter.Successor = xmlFileWriter;
+            //return tcpWriter;
+
+            return new TcpWriterProcessor(options)
+            {
+                Successor = new XmlFileProcessor(options)
+                {
+                    Successor = new XmlFileTransformer(options)
+                }
+            };
         }
     }
 }

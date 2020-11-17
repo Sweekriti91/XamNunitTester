@@ -49,9 +49,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                
+
                 <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Orientation="Horizontal" Spacing="4" HorizontalOptions="CenterAndExpand">
                     <Label Text="Overall result:" TextColor="{Binding Results.OverallResultColor}" FontAttributes="Bold" FontSize="Large"/>
                     <Label Text="{Binding Results.OverallResult}" TextColor="{Binding Results.OverallResultColor}" FontAttributes="Bold" FontSize="Large" />
@@ -102,15 +102,15 @@
 
                 <StackLayout Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="4">
                     <Label Text="Start time:" FontSize="Small" FontAttributes="Bold" />
-                    <Label Text="{Binding Results.StartTime, StringFormat='{0:u}'}" FontSize="Small" />
+                    <Label Text="{Binding Results.TestResult.StartTime, StringFormat='{0:u}'}" FontSize="Small" />
                 </StackLayout>
                 <StackLayout Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="4">
                     <Label Text="End time:" FontSize="Small" FontAttributes="Bold" />
-                    <Label Text="{Binding Results.EndTime, StringFormat='{0:u}'}" FontSize="Small" />
+                    <Label Text="{Binding Results.TestResult.EndTime, StringFormat='{0:u}'}" FontSize="Small" />
                 </StackLayout>
                 <StackLayout Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="4">
                     <Label Text="Duration:" FontSize="Small" FontAttributes="Bold" />
-                    <Label Text="{Binding Results.Duration, StringFormat='{0:s\\.fff} seconds'}" FontSize="Small" />
+                    <Label Text="{Binding Results.TestResult.Duration, StringFormat='{0:F3} seconds'}" FontSize="Small" />
                 </StackLayout>
                 <StackLayout Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="4">
                     <Label Text="Export Status:" FontSize="Small" FontAttributes="Bold" />
@@ -121,15 +121,16 @@
         </ScrollView>
 
         <Button Text="Export Results" HorizontalOptions="FillAndExpand" VerticalOptions="End" Command="{Binding ExportTestResultsXML}">
-        <Button.Triggers>
+            <Button.Triggers>
                 <DataTrigger TargetType="Button" Binding="{Binding HasResults}" Value="False">
                     <Setter Property="IsEnabled" Value="False" />
                 </DataTrigger>
             </Button.Triggers>
         </Button>
-        <Button Text="All Results" Command="{Binding ViewAllResultsCommand}" HorizontalOptions="FillAndExpand" VerticalOptions="End" >
+
+        <Button Text="{Binding ExploreText}" Command="{Binding ExploreTestsCommand}" HorizontalOptions="FillAndExpand">
             <Button.Triggers>
-                <DataTrigger TargetType="Button" Binding="{Binding HasResults}" Value="False">
+                <DataTrigger TargetType="Button" Binding="{Binding Running}" Value="True">
                     <Setter Property="IsEnabled" Value="False" />
                 </DataTrigger>
             </Button.Triggers>
@@ -143,3 +144,5 @@
         </Button>
     </StackLayout>
 </ContentPage>
+
+

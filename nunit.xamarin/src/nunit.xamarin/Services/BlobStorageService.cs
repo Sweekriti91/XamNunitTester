@@ -23,7 +23,7 @@ namespace nunit.xamarin.Services
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
             // Retrieve reference to a previously created container.
-            CloudBlobContainer container = blobClient.GetContainerReference("jsontestcontainer");
+            CloudBlobContainer container = blobClient.GetContainerReference("testrunresults");
 
             // Create the container if it doesn't already exist.
             await container.CreateIfNotExistsAsync().ConfigureAwait(false);

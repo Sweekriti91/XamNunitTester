@@ -69,5 +69,20 @@ namespace NUnit.Runner.Services
         /// Default is [LocalStorage]/TestResults.xml
         /// </summary>
         public string ResultFilePath { get; set; }
+
+        /// <summary>
+        /// Gets or sets the callback that will be called after running the tests.
+        /// </summary>
+        public Action OnCompletedCallback { get; set; }
+
+        /// <summary>
+        /// If True, test results will be logged to the application output.
+        /// </summary>
+        public bool LogToOutput { get; set; }
+
+        /// <summary>
+        /// Gets or sets the xslt transform file for the results.
+        /// </summary>
+        public string XmlTransformFile { get; set; }
     }
 }

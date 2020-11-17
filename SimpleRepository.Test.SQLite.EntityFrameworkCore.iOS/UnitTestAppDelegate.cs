@@ -32,7 +32,7 @@ namespace SimpleRepository.Test.SQLite.EntityFrameworkCore.iOS
             // Do you want to automatically run tests when the app starts?
             nunit.Options = new TestOptions
             {
-                AutoRun = true,
+                AutoRun = false,
                 CreateXmlResultFile = true
             };
 

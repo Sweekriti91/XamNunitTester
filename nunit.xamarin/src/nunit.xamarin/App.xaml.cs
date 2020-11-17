@@ -63,6 +63,7 @@ namespace NUnit.Runner
         public void AddTestAssembly(Assembly testAssembly, Dictionary<string, object> options = null)
         {
             _model.AddTest(testAssembly, options);
+            //_model.AddTest(testAssembly);
         }
 
         /// <summary>

@@ -199,3 +199,11 @@ tools/*
 
 # Android Xamarin
 Resource.Designer.cs
+
+.DS_Store
+
+#Binaries for Testing
+Binaries/
+
+#Constants
+src/nunit.xamarin/Constants.cs

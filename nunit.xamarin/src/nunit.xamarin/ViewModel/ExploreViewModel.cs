@@ -103,6 +103,11 @@ namespace NUnit.Runner.ViewModel
             {
                 await NavigateToChildren(vm);
             }
+            else if(vm.Result != null)
+            {
+                if(vm.Result.ResultState != ResultState.Success)
+                    await Navigation.PushAsync(new ResultsView(new ResultsViewModel(new[] { vm.Result }, false)));
+            }
             else
             {
                 await RunTest(vm);

@@ -44,8 +44,7 @@ namespace NUnit.Runner.ViewModel
             Tests = tests.OrderBy(t => t.Name).ToArray();
             Title = title;
 
-            //_package = package;
-            _package = new TestPackage();
+            _package = package;
 
             RunTestsCommand = new Command(_ => ExecuteTestsAsync(), _ => !Running);
             TestDetailsCommand = new Command<TestViewModel>(vm => NavigateToTestDetails(vm), _ => !Running);
@@ -58,8 +57,7 @@ namespace NUnit.Runner.ViewModel
         private async Task ExecuteTestsAsync()
         {
             Running = true;
-            var debugTEst = Tests.Select(t => t.Test);
-            var results = await _package.ExecuteTestCustom(Tests.Select(t => t.Test));
+            var results = await _package.ExecuteTests(Tests.Select(t => t.Test));
 
             foreach (var result in results.TestResults.Flatten())
             {
@@ -76,10 +74,8 @@ namespace NUnit.Runner.ViewModel
         private async Task RunTest(TestViewModel vm)
         {
             Running = true;
-
-            var run = await _package.ExecuteTestCustom(new[] { vm.Test }, force: !vm.Test.IsSuite);
+            var run = await _package.ExecuteTests(new[] { vm.Test }, force: !vm.Test.IsSuite);
             vm.Result = run.TestResults.Flatten().FirstOrDefault(t => t.Test.FullName == vm.Test.FullName);
-
             Running = false;
         }
 
@@ -102,6 +98,7 @@ namespace NUnit.Runner.ViewModel
         public async Task SelectTest(TestViewModel vm)
         {
             var test = vm.Test;
+            var result = vm.Result;
             if (test.HasChildren)
             {
                 await NavigateToChildren(vm);

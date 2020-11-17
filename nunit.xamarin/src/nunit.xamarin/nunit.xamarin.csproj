@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Company>NUnit</Company>
     <Product>NUnit 3 Xamarin Runner</Product>
     <Copyright>Copyright (C) 2018, Rob Prouse</Copyright>
@@ -28,9 +28,9 @@ Supported Xamarin platforms:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="[3.10.1]" />
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.396" />
-    <PackageReference Include="MobCAT" Version="1.0.7306" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
+    <PackageReference Include="MobCAT" Version="1.1.8" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 

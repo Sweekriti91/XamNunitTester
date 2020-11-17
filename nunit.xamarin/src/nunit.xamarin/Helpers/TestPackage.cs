@@ -100,7 +100,7 @@ namespace NUnit.Runner.Helpers
             return resultPackage;
         }
 
-        public async Task<TestRunResult> ExecuteTestCustom(IEnumerable<ITest> tests, bool force = false)
+        public async Task<TestRunResult> ExecuteTests(IEnumerable<ITest> tests, bool force = false)
         {
             var resultPackage = new TestRunResult();
 
@@ -114,7 +114,6 @@ namespace NUnit.Runner.Helpers
             resultPackage.CompleteTestRun();
             return resultPackage;
         }
-
 
         public async Task<ResultSummary> ProcessResults(TestRunResult results)
         {
@@ -135,6 +134,11 @@ namespace NUnit.Runner.Helpers
 
         private class CustomTestListener : ITestListener
         {
+            public void SendMessage(TestMessage message)
+            {
+                throw new NotImplementedException();
+            }
+
             public void TestFinished(ITestResult result)
             {
                 if (!result.Test.IsSuite)

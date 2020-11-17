@@ -42,11 +42,11 @@ namespace SimpleRepository.Test
         //    Assert.Pass($" {insertionsToTest} HEY THIS PASSED!");
         //}
 
-        //[Test, Order(1)]
-        //[TestCase(1, TestName = "Test Fail")]
-        //public void FailTest(int insertionsToTest)
-        //{
-        //    Assert.Fail($" {insertionsToTest} HEY THIS FAILED!");
-        //}
+        [Test, Order(2)]
+        [TestCase(5, TestName = "Test Fail")]
+        public void FailTest(int insertionsToTest)
+        {
+            Assert.Fail($" {insertionsToTest} HEY THIS FAILED!");
+        }
     }
 }

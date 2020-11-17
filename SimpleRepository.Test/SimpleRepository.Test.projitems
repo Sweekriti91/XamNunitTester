@@ -13,5 +13,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)TestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TestBootstrap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BaseRepositoryTestFixture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UpdatePerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReadPerformanceTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeletePerformanceTests.cs" />
   </ItemGroup>
 </Project>

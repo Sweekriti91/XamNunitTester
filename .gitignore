@@ -336,3 +336,4 @@ Binaries/
 
 #Constants
 nunit.xamarin/src/nunit.xamarin/Constants.cs
+nunit.xamarin/*

@@ -215,7 +215,7 @@ namespace NUnit.Runner.Helpers
 
                 blobReference = new TestDataBlobReference
                 {
-                    Filename = $"[{data.BuildNumber}] {data.DevicePlatform}-{data.Framework}-{data.Device}.json",
+                    Filename = $"[{data.BuildNumber}] {data.DevicePlatform}-{data.Framework}-{data.FrameworkVersion}-{data.Device}.json",
                     Json = jsonData
                 };
             }

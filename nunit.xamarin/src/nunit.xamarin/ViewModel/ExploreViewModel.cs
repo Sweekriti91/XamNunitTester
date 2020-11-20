@@ -105,8 +105,10 @@ namespace NUnit.Runner.ViewModel
             }
             else if(vm.Result != null)
             {
-                if(vm.Result.ResultState != ResultState.Success)
-                    await Navigation.PushAsync(new ResultsView(new ResultsViewModel(new[] { vm.Result }, false)));
+                //if (vm.Result.ResultState != ResultState.Success)
+                //    await Navigation.PushAsync(new ResultsView(new ResultsViewModel(new[] { vm.Result }, false)));
+
+                await Navigation.PushAsync(new TestView(new TestDetailsViewModel(vm.Result)));
             }
             else
             {

@@ -98,16 +98,12 @@ namespace NUnit.Runner.ViewModel
         public async Task SelectTest(TestViewModel vm)
         {
             var test = vm.Test;
-            var result = vm.Result;
             if (test.HasChildren)
             {
                 await NavigateToChildren(vm);
             }
             else if(vm.Result != null)
             {
-                //if (vm.Result.ResultState != ResultState.Success)
-                //    await Navigation.PushAsync(new ResultsView(new ResultsViewModel(new[] { vm.Result }, false)));
-
                 await Navigation.PushAsync(new TestView(new TestDetailsViewModel(vm.Result)));
             }
             else

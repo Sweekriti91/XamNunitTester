@@ -222,6 +222,7 @@ namespace NUnit.Runner.ViewModel
             {
                 //var result = await WriteCustomXmlResultFile().ConfigureAwait(false);
                 //xmlResults = _results.GetCustomTestXml().ToString();
+                var defaultXML = new XmlFileProcessor(new TestOptions() { CreateXmlResultFile = true }).Process(_summary);
                 var blobReference = _summary.GetCustomTestJSON();
 
                 if (blobReference == null)
@@ -229,6 +230,8 @@ namespace NUnit.Runner.ViewModel
 
                 //CloudBlockBlob blockBlob = outputBlobContainer.GetBlockBlobReference(blobReference.Filename);
                 //await blockBlob.UploadTextAsync(blobReference.Json);
+
+
 
                 await BlobStorageService.performBlobOperation(blobReference);
                 ExportStatus = "Export Success!";
@@ -240,33 +243,6 @@ namespace NUnit.Runner.ViewModel
                 Debug.WriteLine("Fatal error while trying to write xml result file!");
                 throw;
             }
-
-            //Upload file to Blob
-
-            /***
-             * UNCOMMENT FOR SANITY CHECK OF FILE EXPORTED
-             *
-             * 
-            var xmlFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library");
-            //file name that gets uploaded to Blob storage
-            string xtc_device_platform = DeviceInfo.Platform.ToString();
-            //manufacturer_model
-            string xtc_device_name = DeviceInfo.Manufacturer.ToString() + "_" + DeviceInfo.Model.ToString();
-            //utc datetimenow
-            string dateTimeNow = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss");
-            string fileName = dateTimeNow + "_" + xtc_device_name + "_" + xtc_device_name + ".xml";
-            string custom_xmlfile = Path.Combine(xmlFilePath, fileName);
-
-            string text = File.ReadAllText(custom_xmlfile);
-            Debug.WriteLine("**** FROM XML FILE IN LIBRARY*****");
-            Debug.WriteLine(text);
-            Debug.WriteLine("******");
-
-             *
-             *
-             *
-             * ***/
-
         }
 
         async Task<string> WriteCustomXmlResultFile()
@@ -297,7 +273,7 @@ namespace NUnit.Runner.ViewModel
 
             using (var resultFileStream = new StreamWriter(custom_xmlfile, false))
             {
-                //var xml = _results.GetCustomTestXml().ToString();
+                //var xml = TestRE.GetCustomTestXml().ToString();
                 //await resultFileStream.WriteAsync(xml);
             }
 
